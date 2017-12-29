@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,14 +51,25 @@ public class CidadeResources {
 	}
 	
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-	public void excluir(@PathVariable Long id) {
-		this.cidadeRepository.delete(id);
+	public ResponseEntity<Void> excluir(@PathVariable Long id) {
+		
+		try {
+			this.cidadeRepository.delete(id);
+		} catch(EmptyResultDataAccessException e) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		return ResponseEntity.noContent().build();
+		
 	}
 	
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public void atualizar(@RequestBody Cidade cidade, @PathVariable("id") Long id) {
+	public ResponseEntity<Void> atualizar(@RequestBody Cidade cidade, @PathVariable("id") Long id) {
 		cidade.setId(id);
 		this.cidadeRepository.save(cidade);
+		
+		return ResponseEntity.noContent().build();
+		
 	}
 	
 }
