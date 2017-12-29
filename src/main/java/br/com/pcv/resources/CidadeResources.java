@@ -25,8 +25,8 @@ public class CidadeResources {
 	private CidadeRepository cidadeRepository;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Cidade> listar() {
-		return this.cidadeRepository.findAll();
+	public ResponseEntity<List<Cidade>> listar() {
+		return ResponseEntity.status(HttpStatus.OK).body(this.cidadeRepository.findAll());
 	}
 	
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
