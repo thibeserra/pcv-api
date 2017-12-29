@@ -15,7 +15,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.pcv.domain.Cidade;
 import br.com.pcv.services.CidadesService;
-import br.com.pcv.services.exceptions.CidadeNaoEncontradaException;
 
 @RestController
 @RequestMapping("/cidades")
@@ -32,13 +31,8 @@ public class CidadeResources {
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> buscarCidade(@PathVariable Long id) {
 		
-		Cidade cidade = null;
-		try {
-			cidade = this.cidadesService.buscar(id);
-		} catch(CidadeNaoEncontradaException e) {
-			return ResponseEntity.notFound().build();
-		}
-		
+		Cidade cidade = this.cidadesService.buscar(id);
+
 		return ResponseEntity.status(HttpStatus.OK).body(cidade);
 	}
 	
@@ -55,26 +49,18 @@ public class CidadeResources {
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> excluir(@PathVariable Long id) {
 		
-		try {
-			this.cidadesService.deletar(id);
-		} catch(CidadeNaoEncontradaException e) {
-			return ResponseEntity.notFound().build();
-		}
-		
+		this.cidadesService.deletar(id);
+
 		return ResponseEntity.noContent().build();
 		
 	}
 	
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> atualizar(@RequestBody Cidade cidade, @PathVariable("id") Long id) {
+		
 		cidade.setId(id);
-		
-		try {
-			this.cidadesService.atualizar(cidade);
-		} catch(CidadeNaoEncontradaException e) {
-			return ResponseEntity.notFound().build();
-		}
-		
+		this.cidadesService.atualizar(cidade);
+
 		return ResponseEntity.noContent().build();
 		
 	}
