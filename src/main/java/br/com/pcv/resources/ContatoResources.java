@@ -13,47 +13,46 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.pcv.domain.Endereco;
-import br.com.pcv.services.EnderecosService;
+import br.com.pcv.domain.Contato;
+import br.com.pcv.services.ContatosService;
+
 
 @RestController
-@RequestMapping("/enderecos")
-public class EnderecoResources {
+@RequestMapping("/contatos")
+public class ContatoResources {
 
 	@Autowired
-	private EnderecosService enderecosService;
+	private ContatosService contatosService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Endereco>> listar() {
-		return ResponseEntity.status(HttpStatus.OK).body(this.enderecosService.listar()); 
+	public ResponseEntity<List<Contato>> listar() {
+		return ResponseEntity.status(HttpStatus.OK).body(this.contatosService.listar());
 	}
 	
-	@RequestMapping(value="{id}", method = RequestMethod.GET)
-	public ResponseEntity<Endereco> buscarEndereco(@PathVariable Long id) {
-		return ResponseEntity.status(HttpStatus.OK).body(this.enderecosService.buscar(id));
+	@RequestMapping(value = "{id}", method = RequestMethod.GET)
+	public ResponseEntity<Contato> buscarContato(@PathVariable Long id) {
+		return ResponseEntity.status(HttpStatus.OK).body(this.contatosService.buscar(id));
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> salvar(@RequestBody Endereco endereco) {
-		
-		endereco = this.enderecosService.salvar(endereco);
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(endereco.getId()).toUri();
+	public ResponseEntity<Void> salvar(@RequestBody Contato contato) {
+		contato = this.contatosService.salvar(contato);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(contato.getId()).toUri();
 		
 		return ResponseEntity.created(uri).build();
 	}
 	
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> excluir(@PathVariable Long id) {
-		this.enderecosService.deletar(id);
+		this.contatosService.deletar(id);
 		
 		return ResponseEntity.noContent().build();
 	}
 	
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Void> atualizar(@RequestBody Endereco endereco, @PathVariable Long id) {
-		endereco.setId(id);
-		this.enderecosService.atualizar(endereco);
+	public ResponseEntity<Void> atualizar(@RequestBody Contato contato, @PathVariable Long id) {
+		contato.setId(id);
+		this.contatosService.atualizar(contato);
 		
 		return ResponseEntity.noContent().build();
 	}

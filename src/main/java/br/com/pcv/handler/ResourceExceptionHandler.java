@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.com.pcv.domain.DetalhesErro;
 import br.com.pcv.services.exceptions.CidadeNaoEncontradaException;
+import br.com.pcv.services.exceptions.ContatoNaoEncontradoException;
 import br.com.pcv.services.exceptions.EnderecoNaoEncontradoException;
 import br.com.pcv.services.exceptions.UfNaoEncontradaException;
 
@@ -45,6 +46,18 @@ public class ResourceExceptionHandler {
 		DetalhesErro erro = new DetalhesErro();
 		erro.setStatus(404L);
 		erro.setTitulo("Endereço não encontrado!");
+		erro.setMensagemDesenvolvedor(e.getMessage());
+		erro.setTimestamp(System.currentTimeMillis());
+		
+		//return ResponseEntity.notFound().build();
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+	}
+	
+	@ExceptionHandler(ContatoNaoEncontradoException.class)
+	public ResponseEntity<DetalhesErro> handleContatoNaoEncontradoException(ContatoNaoEncontradoException e, HttpServletRequest request) {
+		DetalhesErro erro = new DetalhesErro();
+		erro.setStatus(404L);
+		erro.setTitulo("Contato não encontrado!");
 		erro.setMensagemDesenvolvedor(e.getMessage());
 		erro.setTimestamp(System.currentTimeMillis());
 		
