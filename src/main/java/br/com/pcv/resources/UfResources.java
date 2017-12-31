@@ -9,24 +9,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.pcv.domain.Uf;
-import br.com.pcv.repository.UfsRepository;
+import br.com.pcv.services.UfsService;
 
 @RestController
 @RequestMapping("/ufs")
 public class UfResources {
 	
 	@Autowired
-	private UfsRepository ufsRepository;
+	private UfsService ufsService;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public List<Uf> listar() {
 		
-		return this.ufsRepository.findAll();
+		return this.ufsService.listar();
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public Uf buscaUf(@PathVariable Long id) {
-		return this.ufsRepository.findOne(id);
+		return this.ufsService.buscar(id);
 	}
 	
 }
